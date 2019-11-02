@@ -7,7 +7,8 @@ namespace CSharpTestTask.DummyFileCreator
         static void Main(string[] args)
         {
             var fileCreator = new FileCreator();
-            fileCreator.CreateFile("dummy.txt", 5000000);
+            //fileCreator.CreateFileUnorderedFile("dummy.txt", 5000000);
+            fileCreator.CreateOrderdFile("dummy_ordered.txt", 5000000,'a');
         }
     }
 }

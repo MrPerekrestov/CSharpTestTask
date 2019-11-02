@@ -9,8 +9,11 @@ namespace CSharpTestTask.ConsoleApp
     {
         static void Main(string[] args)
         {
-            var compressor = new Compressor("dummy.txt");
+            var compressor = new Compressor("dummy_ordered.txt");
+            //var equal = FileEquals("dummy_ordered.txt.cmprsd", "as_dummy_ordered.txt");
+            //Console.WriteLine(equal);
             var result = compressor.Split();
+            //compressor.AssembleBack();
             //using (var fileStream = new FileStream("dummy.txt", FileMode.Open, FileAccess.Read, FileShare.Read))
             //{
             //    var buffer = new byte[1048576];
@@ -23,6 +26,25 @@ namespace CSharpTestTask.ConsoleApp
             //    File.WriteAllBytes($"{"dummy.txt"}_part{partNumber}.tmp", buffer);
             //}
 
+        }
+        static bool FileEquals(string path1, string path2)
+        {
+            byte[] file1 = File.ReadAllBytes(path1);
+            byte[] file2 = File.ReadAllBytes(path2);
+            if (file1.Length == file2.Length)
+            {
+                for (int i = 0; i < file1.Length; i++)
+                {
+                    if (file1[i] != file2[i])
+                    {
+                        Console.WriteLine($"wrong byte {i}");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            Console.WriteLine($"wrong length {file1.Length} {file2.Length}");
+            return false;
         }
     }
 }

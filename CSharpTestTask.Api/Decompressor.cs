@@ -4,7 +4,8 @@ using System.Text;
 
 namespace CSharpTestTask.Api
 {
-    class Decompressor
+    public class Decompressor
     {
+
     }
 }

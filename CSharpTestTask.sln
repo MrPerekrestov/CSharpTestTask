@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.138
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpTestTask.Api", "CSharpTestTask.Api\CSharpTestTask.Api.csproj", "{A1AC8D84-11D5-485A-8CA1-6CA70FBE0B46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpTestTask.Api", "CSharpTestTask.Api\CSharpTestTask.Api.csproj", "{A1AC8D84-11D5-485A-8CA1-6CA70FBE0B46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpTestTask.ConsoleApp", "CSharpTestTask.ConsoleApp\CSharpTestTask.ConsoleApp.csproj", "{EDE1F9FA-EB7E-4CA0-B06C-D7C11D43A16F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpTestTask.ConsoleApp", "CSharpTestTask.ConsoleApp\CSharpTestTask.ConsoleApp.csproj", "{EDE1F9FA-EB7E-4CA0-B06C-D7C11D43A16F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpTestTask.DummyFileCreator", "CSharpTestTask.DummyFileCreator\CSharpTestTask.DummyFileCreator.csproj", "{64AD8D81-F277-4200-BA13-A079C755FB0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpTestTask.DummyFileCreator", "CSharpTestTask.DummyFileCreator\CSharpTestTask.DummyFileCreator.csproj", "{64AD8D81-F277-4200-BA13-A079C755FB0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpTestTask.Tests", "CSharpTestTask.Tests\CSharpTestTask.Tests.csproj", "{7F7B456D-AEFB-4D96-A94A-88E7DAD9F361}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{64AD8D81-F277-4200-BA13-A079C755FB0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64AD8D81-F277-4200-BA13-A079C755FB0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64AD8D81-F277-4200-BA13-A079C755FB0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F7B456D-AEFB-4D96-A94A-88E7DAD9F361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F7B456D-AEFB-4D96-A94A-88E7DAD9F361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F7B456D-AEFB-4D96-A94A-88E7DAD9F361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F7B456D-AEFB-4D96-A94A-88E7DAD9F361}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
