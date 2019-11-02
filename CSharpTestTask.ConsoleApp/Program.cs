@@ -9,10 +9,10 @@ namespace CSharpTestTask.ConsoleApp
     {
         static void Main(string[] args)
         {
-            var compressor = new Compressor("dummy_ordered.txt");
+            //var compressor = new Compressor("dummy_ordered.txt","dummy_ordered.smprsd");
             //var equal = FileEquals("dummy_ordered.txt.cmprsd", "as_dummy_ordered.txt");
             //Console.WriteLine(equal);
-            var result = compressor.Split();
+            //var result = compressor.Split();
             //compressor.AssembleBack();
             //using (var fileStream = new FileStream("dummy.txt", FileMode.Open, FileAccess.Read, FileShare.Read))
             //{
@@ -25,7 +25,8 @@ namespace CSharpTestTask.ConsoleApp
             //    Console.WriteLine($"{Thread.CurrentThread.Name} readed {readedNumberOfBytes} bytes");
             //    File.WriteAllBytes($"{"dummy.txt"}_part{partNumber}.tmp", buffer);
             //}
-
+            var decompressor = new Decompressor("dummy_ordered.smprsd", "restored_ummy_ordered.txt");
+            var result = decompressor.Decompress();
         }
         static bool FileEquals(string path1, string path2)
         {
