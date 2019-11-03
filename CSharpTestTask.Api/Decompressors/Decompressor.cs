@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading;
 
@@ -17,6 +18,9 @@ namespace CSharpTestTask.Api.Decompressors
         private int _blockSize;
         private long _outputFileSize;
         private ConcurrentQueue<DecompressorBlockInfo> _compressedBlockInfos;
+        private bool _decompressionIsFinished = false;
+        private string _returnMessage = string.Empty;
+        private bool _returnSuccess = false;
 
         public Decompressor(string inputFileName, string outputFileName)
         {
@@ -52,13 +56,11 @@ namespace CSharpTestTask.Api.Decompressors
         }
         private byte[] Decompress(byte[] data)
         {
-            using (var compressedStream = new MemoryStream(data))
-            using (var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
-            using (var resultStream = new MemoryStream())
-            {
-                zipStream.CopyTo(resultStream);
-                return resultStream.ToArray();
-            }
+            using var compressedStream = new MemoryStream(data);
+            using var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress);
+            using var resultStream = new MemoryStream();
+            zipStream.CopyTo(resultStream);
+            return resultStream.ToArray();            
         }
         private void AttachBlock()
         {
@@ -81,7 +83,9 @@ namespace CSharpTestTask.Api.Decompressors
                 }
                 if (decompressedBytes.Length < _blockSize)
                 {
-                    Console.WriteLine("Finished");
+                    _returnMessage = "Decompression was successfully finished";
+                    _returnSuccess = true;
+                    _decompressionIsFinished = true;                    
                 }
             }
 
@@ -105,10 +109,9 @@ namespace CSharpTestTask.Api.Decompressors
                 workingThread.Name = i.ToString();
                 workingThread.Start();
             }
-
-            return ("asdasd", true);
+            SpinWait.SpinUntil(() => _decompressionIsFinished);           
+            return (_returnMessage, _returnSuccess);            
         }
-
 
     }
 }
