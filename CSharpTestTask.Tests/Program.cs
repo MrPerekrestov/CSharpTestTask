@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.IO.Enumeration;
 using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks.Dataflow;
 
 namespace CSharpTestTask.Tests
@@ -21,12 +22,12 @@ namespace CSharpTestTask.Tests
             //FileMatchRegExTest();  
             //CreateBlankFileWithHeader("textfilewithheader.txt");
             //  CreateEmptyFileWithGivenSize("test_file.txt", 10000);
-            var result = ReadMetaData("dummy_ordered.smprsd");
-            Console.WriteLine($"{result.fileSize} {result.numberOfParts} {result.partSize}");
-            foreach(var partSize in result.compressedPartSizes)
-            {
-                Console.WriteLine(partSize);
-            }
+            //var result = ReadMetaData("dummy_ordered.smprsd");
+            //Console.WriteLine($"{result.fileSize} {result.numberOfParts} {result.partSize}");
+            //foreach(var partSize in result.compressedPartSizes)
+            //{
+            //    Console.WriteLine(partSize);
+            //}            
         }
         private static void CreateBlankFileWithHeader(string fileName)
         {

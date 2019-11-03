@@ -6,9 +6,9 @@ using System.IO.Compression;
 using System.Text;
 using System.Threading;
 
-namespace CSharpTestTask.Api
+namespace CSharpTestTask.Api.Decompressors
 {
-    public class Decompressor
+    public class Decompressor : IDecompressor
     {
         private readonly string _inputFileName;
         private readonly string _outputFileName;
@@ -36,13 +36,14 @@ namespace CSharpTestTask.Api
             {
                 var numberOfBytes = binaryReader.ReadInt32();
                 _compressedBlockInfos.Enqueue(
-                    new DecompressorBlockInfo() {
+                    new DecompressorBlockInfo()
+                    {
                         Number = i,
                         NumerOfBytes = numberOfBytes,
                         Position = position
-                    }) ;
+                    });
                 position += numberOfBytes;
-            }         
+            }
         }
         private void CreateOutputFile()
         {
@@ -67,7 +68,7 @@ namespace CSharpTestTask.Api
                 using (var inputFileStream = new FileStream(_inputFileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
                 {
                     inputFileStream.Seek(blockInfo.Position, SeekOrigin.Begin);
-                    inputFileStream.Read(compressedBytes, 0, blockInfo.NumerOfBytes);                    
+                    inputFileStream.Read(compressedBytes, 0, blockInfo.NumerOfBytes);
                 }
 
                 var decompressedBytes = Decompress(compressedBytes);
@@ -77,7 +78,11 @@ namespace CSharpTestTask.Api
                     var position = blockInfo.Number * _blockSize;
                     outputFileStream.Seek(position, SeekOrigin.Begin);
                     outputFileStream.Write(decompressedBytes, 0, decompressedBytes.Length);
-                }                
+                }
+                if (decompressedBytes.Length < _blockSize)
+                {
+                    Console.WriteLine("Finished");
+                }
             }
 
             if (_compressedBlockInfos.Count > 0)
@@ -104,6 +109,6 @@ namespace CSharpTestTask.Api
             return ("asdasd", true);
         }
 
-        
+
     }
 }

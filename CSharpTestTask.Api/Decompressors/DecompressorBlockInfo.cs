@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CSharpTestTask.Api
+namespace CSharpTestTask.Api.Decompressors
 {
     public class DecompressorBlockInfo
     {
