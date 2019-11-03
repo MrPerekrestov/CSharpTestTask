@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CSharpTestTask.Api\CSharpTestTask.Api.csproj" />
     <ProjectReference Include="..\CSharpTestTask.DummyFileCreator\CSharpTestTask.DummyFileCreator.csproj" />
   </ItemGroup>
 

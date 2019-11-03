@@ -39,10 +39,13 @@ namespace CSharpTestTask.Api.Compressors
         }
         private byte[] CompressBlock(byte[] data)
         {
-            using var compressedStream = new MemoryStream();
-            using var zipStream = new GZipStream(compressedStream, CompressionMode.Compress);
-            zipStream.Write(data, 0, data.Length);           
-            return compressedStream.ToArray();            
+            using (var outStream = new MemoryStream())
+            {
+                using (var tinyStream = new GZipStream(outStream, CompressionMode.Compress))
+                using (var mStream = new MemoryStream(data))
+                    mStream.CopyTo(tinyStream);
+               return outStream.ToArray();
+            }
         }
         private void ProcessBlock()
         {
@@ -56,6 +59,7 @@ namespace CSharpTestTask.Api.Compressors
                 ProcessBlock();
             }
         }
+       
         private void WriteCompressedBlockToOutputFile(byte[] bytes, int blockNumber, int readedNumberOfBytes)
         {
 
@@ -71,7 +75,8 @@ namespace CSharpTestTask.Api.Compressors
             writer.Write(compressedBytes.Length);
 
             writer.Seek(0, SeekOrigin.End);
-            writer.Write(compressedBytes, 0, compressedBytes.Length);
+            writer.Write(compressedBytes, 0, compressedBytes.Length);            
+            
             if (readedNumberOfBytes < _blockSize)
             {
                 _returnMessage = "Successfully compressed";

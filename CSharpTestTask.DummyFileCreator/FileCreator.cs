@@ -8,7 +8,7 @@ namespace CSharpTestTask.DummyFileCreator
 {
     public class FileCreator
     {
-        public void CreateFileUnorderedFile(string fileName, int numberOfBytes)
+        public void CreateUnorderedFile(string fileName, int numberOfBytes)
         {
             var random = new Random();
             var data = new byte[numberOfBytes];

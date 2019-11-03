@@ -16,7 +16,7 @@ namespace CSharpTestTask.ConsoleApp
             {
                 Console.WriteLine("Error: 3 arguments are requiered:" +
                     " [method(compress|decompress)] [original file name] [archive file name]\r\n1");
-               
+                return;
             }
 
             var method = args[0];

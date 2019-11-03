@@ -56,33 +56,37 @@ namespace CSharpTestTask.Api.Decompressors
         }
         private byte[] Decompress(byte[] data)
         {
-            using var compressedStream = new MemoryStream(data);
-            using var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress);
-            using var resultStream = new MemoryStream();
-            zipStream.CopyTo(resultStream);
-            return resultStream.ToArray();            
+            byte[] bytes;
+            using (var compressedStream = new MemoryStream(data))
+            using (var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+            using (var resultStream = new MemoryStream())
+            {
+                zipStream.CopyTo(resultStream);
+                bytes = resultStream.ToArray();
+            }
+            return bytes;
         }
         private void AttachBlock()
         {
             if (_compressedBlockInfos.TryDequeue(out var blockInfo))
             {
-                var compressedBytes = new byte[blockInfo.NumerOfBytes];
+                var compressedBytes = new byte[blockInfo.NumerOfBytes];               
                 using (var inputFileStream = new FileStream(_inputFileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
                 {
                     inputFileStream.Seek(blockInfo.Position, SeekOrigin.Begin);
                     inputFileStream.Read(compressedBytes, 0, blockInfo.NumerOfBytes);
                 }
 
-                var decompressedBytes = Decompress(compressedBytes);
+                var decompressedBytes = Decompress(compressedBytes);               
 
-                using (var outputFileStream = new FileStream(_outputFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
+                using (var outputFileStream = new FileStream(_outputFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
                 {
                     var position = blockInfo.Number * _blockSize;
                     outputFileStream.Seek(position, SeekOrigin.Begin);
                     outputFileStream.Write(decompressedBytes, 0, decompressedBytes.Length);
                 }
                 if (decompressedBytes.Length < _blockSize)
-                {
+                {                   
                     _returnMessage = "Decompression was successfully finished";
                     _returnSuccess = true;
                     _decompressionIsFinished = true;                    
