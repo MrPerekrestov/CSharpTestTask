@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Threading;
 
@@ -48,11 +49,40 @@ namespace CSharpTestTask.Api
             using var fileStream = new FileStream(_outputFileName, FileMode.Create, FileAccess.Write, FileShare.None);
             fileStream.SetLength(_outputFileSize);
         }
+        private byte[] Decompress(byte[] data)
+        {
+            using (var compressedStream = new MemoryStream(data))
+            using (var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+            using (var resultStream = new MemoryStream())
+            {
+                zipStream.CopyTo(resultStream);
+                return resultStream.ToArray();
+            }
+        }
         private void AttachBlock()
         {
             if (_compressedBlockInfos.TryDequeue(out var blockInfo))
             {
-               
+                var compressedBytes = new byte[blockInfo.NumerOfBytes];
+                using (var inputFileStream = new FileStream(_inputFileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
+                {
+                    inputFileStream.Seek(blockInfo.Position, SeekOrigin.Begin);
+                    inputFileStream.Read(compressedBytes, 0, blockInfo.NumerOfBytes);                    
+                }
+
+                var decompressedBytes = Decompress(compressedBytes);
+
+                using (var outputFileStream = new FileStream(_outputFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
+                {
+                    var position = blockInfo.Number * _blockSize;
+                    outputFileStream.Seek(position, SeekOrigin.Begin);
+                    outputFileStream.Write(decompressedBytes, 0, decompressedBytes.Length);
+                }                
+            }
+
+            if (_compressedBlockInfos.Count > 0)
+            {
+                AttachBlock();
             }
         }
         public (string message, bool success) Decompress()
