@@ -2,16 +2,9 @@
 using CSharpTestTask.Api.Decompressors;
 using CSharpTestTask.DummyFileCreator;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
-using System.IO.Enumeration;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks.Dataflow;
+
 
 namespace CSharpTestTask.Tests
 {
@@ -22,41 +15,47 @@ namespace CSharpTestTask.Tests
             var fileCreator = new FileCreator();
             var inputFileName = "inputFile";
             var outputFileName = "inputFile_compressed";
-            var restoredFileName = "inputFile_restored";
-            UnorderedFileTest(fileCreator, inputFileName, outputFileName, restoredFileName);
+            var restoredFileName = "inputFile_restored";           
             OrderedFileTest(fileCreator, inputFileName, outputFileName, restoredFileName);
         }
-
-        private static void UnorderedFileTest(FileCreator fileCreator, string inputFileName, string outputFileName, string restoredFileName)
-        {
-            Console.WriteLine("unouteder file 10mb test");
-            fileCreator.CreateUnorderedFile(inputFileName, 700000);           
-            var compressor = new CompressorWithMonitor(inputFileName, outputFileName);
-            var decompressor = new Decompressor(outputFileName, restoredFileName);
-            var result = Test(compressor, decompressor, inputFileName, outputFileName, restoredFileName);
-            Console.WriteLine(result);
-            Console.WriteLine(FileEquals(inputFileName, restoredFileName));
-        }
+      
         private static void OrderedFileTest(FileCreator fileCreator, string inputFileName, string outputFileName, string restoredFileName)
         {
-            Console.WriteLine("Ordered file 10mb test");           
-            fileCreator.CreateOrderdFile(inputFileName, 900000, new[] { 's', 'f', 'a' });
-            var compressor = new CompressorWithMonitor(inputFileName, outputFileName);
-            var decompressor = new Decompressor(outputFileName, restoredFileName);
+            Console.WriteLine("Three different symbols  30mb test");
+            Console.WriteLine(new string('-',20));
+            fileCreator.CreateOrderdFile(inputFileName, 30000000, new[] { 's', 'f', 'a' });
+            Console.WriteLine("Input file size:\t30000000 bytes");
+            var compressor = new CompressorWithMonitor(inputFileName, outputFileName);           
+            var decompressor = new Decompressor(outputFileName, restoredFileName);            
             var result = Test(compressor, decompressor, inputFileName, outputFileName, restoredFileName);
-            Console.WriteLine(result);
-            Console.WriteLine(FileEquals(inputFileName, restoredFileName));
+            Console.WriteLine($"Equality test:\t\t{result}");
+            File.Delete(inputFileName);
+            File.Delete(outputFileName);
+            File.Delete(restoredFileName);
+            Console.WriteLine(new string('-', 20));
+            Console.WriteLine("Files were deleted");           
         }
 
         static bool Test(ICompressor compressor,IDecompressor decompressor, string inputFileName, string outputFileName, string restoredFileName)
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             var compressResult = compressor.Compress();
+            stopWatch.Stop();
+            var compressionTime = stopWatch.ElapsedMilliseconds;            
             if (!compressResult.success) return false;
+            Console.WriteLine($"Output file size:\t{new FileInfo(outputFileName).Length} bytes");
+
+            stopWatch.Reset();
+            stopWatch.Start();
             var decompressResult = decompressor.Decompress();
+            stopWatch.Stop();
+            var decompressionTime = stopWatch.ElapsedMilliseconds;
             if (!decompressResult.success) return false;
-            var filesEquals  = FileEquals(inputFileName, restoredFileName);
-            if (filesEquals == false) Console.WriteLine("files are not equal");
-            return true;
+            Console.WriteLine($"Restored file size:\t{new FileInfo(restoredFileName).Length} bytes");
+            Console.WriteLine($"Compression time:\t{compressionTime} ms");
+            Console.WriteLine($"Decompression time:\t{decompressionTime} ms");
+            return  FileEquals(inputFileName, restoredFileName);            
         }
        
         static bool FileEquals(string path1, string path2)

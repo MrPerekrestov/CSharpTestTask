@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.0": {
+      "GZipTest/1.0.0": {
+        "dependencies": {
+          "CSharpTestTask.Api": "1.0.0"
+        },
+        "runtime": {
+          "GZipTest.dll": {}
+        }
+      },
+      "CSharpTestTask.Api/1.0.0": {
+        "runtime": {
+          "CSharpTestTask.Api.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GZipTest/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CSharpTestTask.Api/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

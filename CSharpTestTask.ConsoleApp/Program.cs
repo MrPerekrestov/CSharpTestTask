@@ -20,10 +20,10 @@ namespace CSharpTestTask.ConsoleApp
             }
 
             var method = args[0];
-            var inputFileName = args[1];
-            var outputFileName = args[2];
+            var inputFilePath = args[1];
+            var outputFilePath = args[2];
 
-            var fileChecker = new IOFilesChecker(inputFileName, outputFileName);
+            var fileChecker = new IOFilesChecker(inputFilePath, outputFilePath);
             var (message,success) = fileChecker.CheckFiles();
             if (!success)
             {
@@ -34,11 +34,11 @@ namespace CSharpTestTask.ConsoleApp
             switch (method)
             {
                case "compress":
-                    var compressor = new CompressorWithSpinWait(inputFileName, outputFileName);
+                    var compressor = new CompressorWithSpinWait(inputFilePath, outputFilePath);
                     PerformCompression(compressor);
                     break;
                case "decompress":
-                    var decompressor = new Decompressor(inputFileName, outputFileName);
+                    var decompressor = new Decompressor(inputFilePath, outputFilePath);
                     PerformDecompression(decompressor);
                     break;
                default:                    
