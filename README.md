@@ -15,7 +15,7 @@
 * проэкт для тестирования работы логики сжатия
 
 ### "GZipTest" 
-* скомпелированный под win-64 в release режиме проэкт **"CSharpTestTask.ConsoleApp"** с файлом **"GZipTest.exe"**
+* скомпелированный под win-64 в release режиме проэкт **"CSharpTestTask.ConsoleApp"** с файлом **"GZipTest.exe"**. Версия фреймворка **.NET Core 3.0**.
 
 ## Краткое описание логики сжатия:
 
