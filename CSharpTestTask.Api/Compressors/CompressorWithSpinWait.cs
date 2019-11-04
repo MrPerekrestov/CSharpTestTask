@@ -61,7 +61,7 @@ namespace CSharpTestTask.Api.Compressors
         {            
             var compressedBytes = CompressBlock(bytes[0..readedNumberOfBytes]);
             
-            SpinWait.SpinUntil(() => blockNumber == _blockNumberToWrite);
+            SpinWait.SpinUntil(() => blockNumber == _blockNumberToWrite || _compressionIsFinished);
 
             using (var fileStream = new FileStream(_outputFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
             using (var writer = new BinaryWriter(fileStream))

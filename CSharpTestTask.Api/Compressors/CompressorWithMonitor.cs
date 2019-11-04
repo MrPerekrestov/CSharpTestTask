@@ -63,7 +63,7 @@ namespace CSharpTestTask.Api.Compressors
             var compressedBytes = CompressBlock(bytes[0..readedNumberOfBytes]);
             lock (_writeCompressedBlockLock)
             {
-                while (!(blockNumber == _blockNumberToWrite))
+                while (!(blockNumber == _blockNumberToWrite || _compressionIsFinished))
                     Monitor.Wait(_writeCompressedBlockLock);
 
                 using (var fileStream = new FileStream(_outputFilePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write))
