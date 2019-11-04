@@ -2,9 +2,6 @@
 using CSharpTestTask.Api.Decompressors;
 using CSharpTestTask.Api.IOFilesCheckers;
 using System;
-using System.IO;
-using System.Net.Http;
-using System.Threading;
 
 namespace CSharpTestTask.ConsoleApp
 {

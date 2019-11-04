@@ -4,6 +4,7 @@ using CSharpTestTask.DummyFileCreator;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 
 namespace CSharpTestTask.Tests
@@ -12,27 +13,29 @@ namespace CSharpTestTask.Tests
     {
         static void Main(string[] args)
         {
+            Console.WriteLine($".NET Core version:\t{GetNetCoreVersion()}\r\n");
             var fileCreator = new FileCreator();
             var inputFileName = "inputFile";
             var outputFileName = "inputFile_compressed";
             var restoredFileName = "inputFile_restored";           
-            OrderedFileTest(fileCreator, inputFileName, outputFileName, restoredFileName);
+            ThreeSymbols30MBTest(fileCreator, inputFileName, outputFileName, restoredFileName);
         }
       
-        private static void OrderedFileTest(FileCreator fileCreator, string inputFileName, string outputFileName, string restoredFileName)
+        private static void ThreeSymbols30MBTest(FileCreator fileCreator, string inputFileName, string outputFileName, string restoredFileName)
         {
+            Console.WriteLine(new string('-', 40));
             Console.WriteLine("Three different symbols  30mb test");
-            Console.WriteLine(new string('-',20));
-            fileCreator.CreateOrderdFile(inputFileName, 30000000, new[] { 's', 'f', 'a' });
+            Console.WriteLine(new string('-',40));
+            fileCreator.CreateFileUsingChars(inputFileName, 30000000, new[] { 's', 'f', 'a' });
             Console.WriteLine("Input file size:\t30000000 bytes");
-            var compressor = new CompressorWithMonitor(inputFileName, outputFileName);           
+            var compressor = new CompressorWithSpinWait(inputFileName, outputFileName);           
             var decompressor = new Decompressor(outputFileName, restoredFileName);            
             var result = Test(compressor, decompressor, inputFileName, outputFileName, restoredFileName);
             Console.WriteLine($"Equality test:\t\t{result}");
             File.Delete(inputFileName);
             File.Delete(outputFileName);
             File.Delete(restoredFileName);
-            Console.WriteLine(new string('-', 20));
+            Console.WriteLine(new string('-', 40));
             Console.WriteLine("Files were deleted");           
         }
 
@@ -76,6 +79,15 @@ namespace CSharpTestTask.Tests
             }
             Console.WriteLine("length is not the same");
             return false;
+        }
+        public static string GetNetCoreVersion()
+        {
+            var assembly = typeof(System.Runtime.GCSettings).GetTypeInfo().Assembly;
+            var assemblyPath = assembly.CodeBase.Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            int netCoreAppIndex = Array.IndexOf(assemblyPath, "Microsoft.NETCore.App");
+            if (netCoreAppIndex > 0 && netCoreAppIndex < assemblyPath.Length - 2)
+                return assemblyPath[netCoreAppIndex + 1];
+            return null;
         }
 
     }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Text;
 
 namespace CSharpTestTask.DummyFileCreator
 {
@@ -15,7 +12,7 @@ namespace CSharpTestTask.DummyFileCreator
             random.NextBytes(data);
             File.WriteAllBytes(fileName, data);
         }
-        public void CreateOrderdFile(string fileName, int numberOfBytes, char[] chars)
+        public void CreateFileUsingChars(string fileName, int numberOfBytes, char[] chars)
         {            
             var data = new byte[numberOfBytes];
             var random = new Random();

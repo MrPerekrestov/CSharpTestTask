@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.IO.Compression;
-using System.Threading.Tasks.Dataflow;
-using CSharpTestTask.Api.IOFilesCheckers;
+
 
 namespace CSharpTestTask.Api.Compressors
 {

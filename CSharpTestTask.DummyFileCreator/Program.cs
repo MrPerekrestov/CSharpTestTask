@@ -1,14 +1,11 @@
-﻿using System;
-
-namespace CSharpTestTask.DummyFileCreator
+﻿namespace CSharpTestTask.DummyFileCreator
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var fileCreator = new FileCreator();
-            //fileCreator.CreateFileUnorderedFile("dummy.txt", 5000000);
-            fileCreator.CreateOrderdFile("dummy_ordered.txt", 900000,new[]{'a','b','c'});
+            var fileCreator = new FileCreator();        
+            fileCreator.CreateFileUsingChars("dummy_ordered.txt", 900000,new[]{'a','b','c'});
         }
     }
 }

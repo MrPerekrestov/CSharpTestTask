@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
 using System.Threading;
 
 namespace CSharpTestTask.Api.Decompressors

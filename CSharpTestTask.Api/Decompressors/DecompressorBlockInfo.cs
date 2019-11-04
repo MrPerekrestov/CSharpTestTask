@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CSharpTestTask.Api.Decompressors
+﻿namespace CSharpTestTask.Api.Decompressors
 {
     public class DecompressorBlockInfo
     {
