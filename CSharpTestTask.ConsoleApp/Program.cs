@@ -7,13 +7,13 @@ namespace CSharpTestTask.ConsoleApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             if (args.Length != 3)
             {
                 Console.WriteLine("Error: 3 arguments are requiered:" +
-                    " [method(compress|decompress)] [original file name] [archive file name]\r\n1");
-                return;
+                    " [method(compress|decompress)] [original file name] [archive file name]");
+                return 1;
             }
 
             var method = args[0];
@@ -24,45 +24,43 @@ namespace CSharpTestTask.ConsoleApp
             var (message,success) = fileChecker.CheckFiles();
             if (!success)
             {
-                Console.WriteLine($"\r\n{message}\r\n1");
-                return;
+                Console.WriteLine($"\r\n{message}");
+                return 1;
             }
 
             switch (method)
             {
                case "compress":
                     var compressor = new CompressorWithSpinWait(inputFilePath, outputFilePath);
-                    PerformCompression(compressor);
-                    break;
+                    return PerformCompression(compressor);                    
                case "decompress":
                     var decompressor = new Decompressor(inputFilePath, outputFilePath);
-                    PerformDecompression(decompressor);
-                    break;
+                    return PerformDecompression(decompressor);                    
                default:                    
-                    Console.WriteLine($"\r\nError: There is no such method as '{args[0]}'\r\n1");                    
-                    break;
+                    Console.WriteLine($"\r\nError: There is no such method as '{args[0]}'");
+                    return 1;                    
             }            
         }
-        private static void PerformCompression(ICompressor compressor)
+        private static int PerformCompression(ICompressor compressor)
         {          
             var (message,success) = compressor.Compress();
             if (success)
             {
-                Console.WriteLine("\r\n0");
-                return;
+                return 0;               
             }
-            Console.WriteLine($"\r\nError: {message}\r\n1");
+            Console.WriteLine($"\r\nError: {message}");
+            return 1;
         }
        
-        private static void PerformDecompression(IDecompressor compressor)
+        private static int PerformDecompression(IDecompressor compressor)
         {
             var (message, success) = compressor.Decompress();
             if (success)
             {
-                Console.WriteLine("0");
-                return;
+                return 0;                
             }           
-            Console.WriteLine($"\r\nError: {message}\r\n1");
+            Console.WriteLine($"\r\nError: {message}");
+            return 1;
         }
     }
 }
