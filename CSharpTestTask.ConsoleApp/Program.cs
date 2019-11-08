@@ -48,10 +48,15 @@ namespace CSharpTestTask.ConsoleApp
         private static int PerformCompression(ICompressor compressor)
         {          
             var (message,success) = compressor.Compress();
+            if (compressor is IDisposable disposableCompressor)
+            {
+                disposableCompressor.Dispose();
+                Console.WriteLine("Compressor was disposed");
+            }
             if (success)
             {
                 return 0;               
-            }
+            }            
             Console.WriteLine($"\r\nError: {message}");
             return 1;
         }
