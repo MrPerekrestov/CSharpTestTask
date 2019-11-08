@@ -73,24 +73,24 @@ namespace CSharpTestTask.Api.Compressors
                     while (!(blockNumber == _blockNumberToWrite || _compressionIsFinished))
                         Monitor.Wait(_writeCompressedBlockLock);
 
-                    var headerPosition = 2 * sizeof(int) + sizeof(long) + blockNumber * sizeof(int);                   
+                    var headerPosition = 2 * sizeof(int) + sizeof(long) + blockNumber * sizeof(int);
                     writer.Seek(headerPosition, SeekOrigin.Begin);
                     writer.Write(compressedBytes.Length);
 
-                    fileStream.SetLength(fileStream.Length + compressedBytes.Length);                    
-                    fileStream.Seek(-compressedBytes.Length, SeekOrigin.End);                                     
-                    _blockNumberToWrite++;                
-                    Monitor.PulseAll(_writeCompressedBlockLock);                   
+                    fileStream.SetLength(fileStream.Length + compressedBytes.Length);
+                    fileStream.Seek(-compressedBytes.Length, SeekOrigin.End);
+                    _blockNumberToWrite++;
+                    Monitor.PulseAll(_writeCompressedBlockLock);
                 }
                 fileStream.Write(compressedBytes, 0, compressedBytes.Length);
             }
 
             if (readedNumberOfBytes < _blockSize)
-                {
-                    _returnMessage = "Successfully compressed";
-                    _returnSuccess = true;
-                    _compressionIsFinished = true;
-                }
+            {
+                _returnMessage = "Successfully compressed";
+                _returnSuccess = true;
+                _compressionIsFinished = true;
+            }
 
         }
 

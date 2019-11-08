@@ -9,16 +9,20 @@ namespace CSharpTestTask.ConsoleApp
     {
         static int Main(string[] args)
         {
-            if (args.Length != 3)
-            {
-                Console.WriteLine("Error: 3 arguments are requiered:" +
-                    " [method(compress|decompress)] [original file name] [archive file name]");
-                return 1;
-            }
+            //if (args.Length != 3)
+            //{
+            //    Console.WriteLine("Error: 3 arguments are requiered:" +
+            //        " [method(compress|decompress)] [original file name] [archive file name]");
+            //    return 1;
+            //}
 
-            var method = args[0];
-            var inputFilePath = args[1];
-            var outputFilePath = args[2];
+            //var method = args[0];
+            //var inputFilePath = args[1];
+            //var outputFilePath = args[2];
+
+            var method = "compress";
+            var inputFilePath = "dummy.txt";
+            var outputFilePath = "1";
 
             var fileChecker = new IOFilesChecker(inputFilePath, outputFilePath);
             var (message,success) = fileChecker.CheckFiles();
@@ -31,7 +35,7 @@ namespace CSharpTestTask.ConsoleApp
             switch (method)
             {
                case "compress":
-                    var compressor = new CompressorWithSpinWait(inputFilePath, outputFilePath);
+                    var compressor = new CompressorCorrectedV_2(inputFilePath, outputFilePath);
                     return PerformCompression(compressor);                    
                case "decompress":
                     var decompressor = new Decompressor(inputFilePath, outputFilePath);
