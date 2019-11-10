@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Text;
 using System.Threading;
 using CSharpTestTask.Api.Shared;
 
@@ -184,6 +181,7 @@ namespace CSharpTestTask.Api.Compressors
                 _readyToCompress.Set();
             }
         }
+
         #region IDisposable Support
         private bool disposedValue = false;
 
