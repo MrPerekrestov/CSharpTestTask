@@ -19,11 +19,8 @@ namespace CSharpTestTask.Tests
             var inputFileName = "inputFile";
             var outputFileName = "inputFile_compressed";
             var restoredFileName = "inputFile_restored";
-            ThreeSymbols30MBTest(fileCreator, inputFileName, outputFileName, restoredFileName);
-
-            //var result = Decompress(File.ReadAllBytes("part_2"));
-            //Console.WriteLine($"{result.Length}");
-            //Console.ReadKey();
+            ThreeSymbols50MBTest(fileCreator, inputFileName, outputFileName, restoredFileName);
+           
         }
         private static byte[] Decompress(byte[] data)
         {
@@ -38,18 +35,17 @@ namespace CSharpTestTask.Tests
             return bytes;
         }
 
-        private static void ThreeSymbols30MBTest(FileCreator fileCreator, string inputFileName, string outputFileName, string restoredFileName)
+        private static void ThreeSymbols50MBTest(FileCreator fileCreator, string inputFileName, string outputFileName, string restoredFileName)
         {
             Console.WriteLine(new string('-', 40));
-            Console.WriteLine("Three different symbols  5mb test");
+            Console.WriteLine("Three different symbols  50mb test");
             Console.WriteLine(new string('-', 40));
-            fileCreator.CreateFileUsingChars(inputFileName, 5000000, new[] { 's', 'f', 'a' });
-            Console.WriteLine("Input file size:\t5000000 bytes");
+           // fileCreator.CreateFileUsingChars(inputFileName, 50000000, new[] { 's', 'f', 'a' });
+            Console.WriteLine("Input file size:\t50000000 bytes");
             var compressor = new CompressorCorrected(inputFileName, outputFileName);
-            var decompressor = new Decompressor(outputFileName, restoredFileName);
+            var decompressor = new DecompressorCorrected(outputFileName, restoredFileName);
             var result = Test(compressor, decompressor, inputFileName, outputFileName, restoredFileName);
-            Console.WriteLine($"Equality test:\t\t{result}");
-            File.Delete(inputFileName);
+            Console.WriteLine($"Equality test:\t\t{result}");           
             File.Delete(outputFileName);
             File.Delete(restoredFileName);
             Console.WriteLine(new string('-', 40));
@@ -62,6 +58,10 @@ namespace CSharpTestTask.Tests
             stopWatch.Start();
             var compressResult = compressor.Compress();
             stopWatch.Stop();
+            if (compressor is IDisposable disposableCompressor)
+            {
+                disposableCompressor.Dispose();
+            }
             var compressionTime = stopWatch.ElapsedMilliseconds;
             if (!compressResult.success) return false;
             Console.WriteLine($"Output file size:\t{new FileInfo(outputFileName).Length} bytes");
@@ -70,6 +70,10 @@ namespace CSharpTestTask.Tests
             stopWatch.Start();
             var decompressResult = decompressor.Decompress();
             stopWatch.Stop();
+            if (decompressor is IDisposable disposableDecompressor)
+            {
+                disposableDecompressor.Dispose();
+            }
             var decompressionTime = stopWatch.ElapsedMilliseconds;
             if (!decompressResult.success) return false;
             Console.WriteLine($"Restored file size:\t{new FileInfo(restoredFileName).Length} bytes");

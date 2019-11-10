@@ -32,11 +32,7 @@ namespace CSharpTestTask.Api.Decompressors
             _blockSize = binaryReader.ReadInt32();
             _outputFileSize = binaryReader.ReadInt64();
             _compressedBlockInfos = new ConcurrentQueue<DecompressorBlockInfo>();
-            long position = 2 * sizeof(int) + sizeof(long) + _numberOfBlocks * sizeof(int);
-            Console.WriteLine($"Number of blocks = {_numberOfBlocks}");
-            Console.WriteLine($"Block size {_blockSize}");
-            Console.WriteLine($"Output file size {_outputFileSize}");
-            Console.WriteLine(new string('x',40));
+            long position = 2 * sizeof(int) + sizeof(long) + _numberOfBlocks * sizeof(int);           
             for (var i = 0; i < _numberOfBlocks; i++)
             {              
                 var numberOfBytes = binaryReader.ReadInt32();
@@ -46,9 +42,7 @@ namespace CSharpTestTask.Api.Decompressors
                         Number = i,
                         NumerOfBytes = numberOfBytes,
                         Position = position
-                    });
-                Console.WriteLine($"Block position = {position}");
-                Console.WriteLine($"Block number number of bytes = {numberOfBytes}");
+                    });                
                 position += numberOfBytes;
                
             }          
@@ -80,36 +74,28 @@ namespace CSharpTestTask.Api.Decompressors
                 for (int i = 0; i < file1.Length; i++)
                 {
                     if (file1[i] != file2[i])
-                    {
-                        Console.WriteLine($"{i} byte is not the same");
+                    {                        
                         return false;
                     }
                 }
                 return true;
-            }
-            Console.WriteLine("length is not the same");
+            }           
             return false;
         }
         private void AttachBlock()
         {
             if (_compressedBlockInfos.TryDequeue(out var blockInfo))
             {               
-                Console.WriteLine($"trying to decompress bock {blockInfo.Number}");
+                
                 var compressedBytes = new byte[blockInfo.NumerOfBytes];               
                 using (var inputFileStream = new FileStream(_inputFileName, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
                 {
                     inputFileStream.Seek(blockInfo.Position, SeekOrigin.Begin);
                     inputFileStream.Read(compressedBytes, 0, blockInfo.NumerOfBytes);
-                }
-                var bytes =File.ReadAllBytes($"part_{blockInfo.Number}");
-                Console.WriteLine($"Needed bytes {blockInfo.Number}: {bytes[0]}, {bytes[1]}, {bytes[2]}, {bytes[3]},");
-                Console.WriteLine($"Gotten bytes {blockInfo.Number}: {compressedBytes[0]}, {compressedBytes[1]}, {compressedBytes[2]}, {compressedBytes[3]}" );
-                File.WriteAllBytes($"part_readed_{blockInfo.Number}", compressedBytes);
-                Console.WriteLine($"Files of part {blockInfo.Number} are equal: { FileEquals($"part_readed_{blockInfo.Number}", $"part_{blockInfo.Number}")}");
+                }                          
                 
-                var decompressedBytes = Decompress(compressedBytes);
-               
-                Console.WriteLine($"block '{blockInfo.Number}' was decompressed to {decompressedBytes.Length}");
+                var decompressedBytes = Decompress(compressedBytes);               
+                
                 using (var outputFileStream = new FileStream(_outputFileName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
                 {
                     var position = blockInfo.Number * _blockSize;

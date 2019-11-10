@@ -5,7 +5,7 @@
         static void Main(string[] args)
         {
             var fileCreator = new FileCreator();        
-            fileCreator.CreateFileUsingChars("dummy.txt", 10000000,new[]{'a','b','c'});
+            fileCreator.CreateFileUsingChars("dummy.txt", 30000000,new[]{'a','b','c'});
         }
     }
 }

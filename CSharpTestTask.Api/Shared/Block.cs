@@ -1,4 +1,4 @@
-﻿namespace CSharpTestTask.Api.Compressors
+﻿namespace CSharpTestTask.Api.Shared
 {
     internal class Block
     {
